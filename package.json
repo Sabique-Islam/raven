@@ -5,6 +5,7 @@
   "type": "commonjs",
   "dependencies": {
     "csv-parse": "^6.2.0",
+    "csv-stringify": "^6.7.0",
     "dotenv": "^17.3.1",
     "xlsx": "^0.18.5"
   }
