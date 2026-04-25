@@ -137,4 +137,7 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 
+# the folder to add details about you to write personalized emails (context/README.md)
+context
+
 # End of https://www.toptal.com/developers/gitignore/api/node
