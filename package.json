@@ -1,0 +1,11 @@
+{
+  "name": "email-sender",
+  "version": "1.0.0",
+  "description": "Standalone Gmail/Outlook email sender",
+  "type": "commonjs",
+  "dependencies": {
+    "csv-parse": "^6.2.0",
+    "dotenv": "^17.3.1",
+    "xlsx": "^0.18.5"
+  }
+}
