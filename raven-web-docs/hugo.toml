@@ -1,0 +1,59 @@
+baseURL = 'https://raven.nopejs.me'
+languageCode = 'en-us'
+title = 'Raven'
+theme = 'hugo-book'
+
+# Hugo Book theme lives in themes/hugo-book — run ./scripts/setup-theme.sh once.
+# Compatible: hugo-book v11 + Hugo Extended 0.145+
+
+disablePathToLower = true
+enableGitInfo = false
+enableRobotsTXT = true
+
+[sitemap]
+  changefreq = 'weekly'
+  priority = 0.5
+
+[params]
+  BookTheme = 'dark'
+  BookLogo = 'logo.png'
+  BookFavicon = 'favicon.png'
+  BookToC = true
+  BookSection = 'docs'
+  BookRepo = 'https://github.com/Sabique-Islam/raven'
+  BookEditPath = 'edit/main/raven-web-docs'
+  BookCommitPath = 'commit/main'
+  BookDateFormat = 'January 2, 2006'
+
+  description = 'Raven is a CLI to discover jobs across Greenhouse, Lever, Ashby, Workday and board feeds, draft tailored applications from your resume, and send outreach via Gmail or Outlook.'
+  author = 'Sabique Islam'
+  images = ['logo.png']
+  keywords = [
+    'raven cli',
+    'job search',
+    'job discovery',
+    'ATS',
+    'Greenhouse',
+    'Lever',
+    'Ashby',
+    'Workday',
+    'resume tailoring',
+    'job application',
+    'outreach email',
+    'software engineer jobs',
+    'remote jobs',
+  ]
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    style = 'monokai'
+    lineNos = false
+
+[menu]
+  [[menu.after]]
+    name = 'Raven CLI'
+    url = '/docs/getting-started/installation/'
+    weight = 5

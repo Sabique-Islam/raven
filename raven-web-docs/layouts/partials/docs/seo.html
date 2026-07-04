@@ -1,0 +1,66 @@
+{{- $desc := "" -}}
+{{- with .Description -}}
+  {{- $desc = . -}}
+{{- else -}}
+  {{- with .Summary -}}
+    {{- $desc = . -}}
+  {{- else -}}
+    {{- $desc = .Site.Params.description | default "Raven CLI documentation — discover jobs, draft tailored applications, send outreach." -}}
+  {{- end -}}
+{{- end -}}
+{{- $desc = $desc | plainify | truncate 160 -}}
+{{- $title := trim (partial "docs/html-head-title" .) "\n\r\t " -}}
+{{- $image := "logo.png" | absURL -}}
+{{- with .Params.images -}}
+  {{- $image = (index . 0) | absURL -}}
+{{- else -}}
+  {{- with .Site.Params.images -}}
+    {{- $image = (index . 0) | absURL -}}
+  {{- end -}}
+{{- end -}}
+{{- $canonical := .Permalink | absURL -}}
+
+<meta name="description" content="{{ $desc }}">
+<meta name="author" content="{{ .Site.Params.author | default "Raven" }}">
+{{- with .Site.Params.keywords -}}
+<meta name="keywords" content="{{ delimit . ", " }}">
+{{- end -}}
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="theme-color" content="#0a0c0f">
+<meta name="color-scheme" content="dark">
+
+<meta property="og:site_name" content="{{ .Site.Title }}">
+<meta property="og:title" content="{{ $title }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:type" content="{{ if .IsHome }}website{{ else }}article{{ end }}">
+<meta property="og:url" content="{{ $canonical }}">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="{{ $image }}">
+<meta property="og:image:alt" content="Raven logo — job discovery CLI">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="{{ $title }}">
+<meta name="twitter:description" content="{{ $desc }}">
+<meta name="twitter:image" content="{{ $image }}">
+<meta name="twitter:image:alt" content="Raven logo — job discovery CLI">
+
+{{- $schemaType := cond .IsHome "WebSite" "TechArticle" -}}
+{{- $schema := dict
+  "@context" "https://schema.org"
+  "@type" $schemaType
+  "headline" $title
+  "name" $title
+  "description" $desc
+  "url" $canonical
+  "inLanguage" "en-US"
+  "image" $image
+  "publisher" (dict
+    "@type" "Organization"
+    "name" "Raven"
+    "logo" (dict "@type" "ImageObject" "url" ("logo.png" | absURL))
+  )
+-}}
+{{- if not .IsHome -}}
+  {{- $schema = merge $schema (dict "isPartOf" (dict "@type" "WebSite" "name" .Site.Title "url" .Site.BaseURL)) -}}
+{{- end -}}
+<script type="application/ld+json">{{ $schema | jsonify | safeJS }}</script>

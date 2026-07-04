@@ -1,0 +1,7 @@
+{{- if .IsHome -}}
+Raven — Discover Jobs, Draft Applications, Send Outreach
+{{- else if eq .Title "Documentation" -}}
+Documentation | Raven
+{{- else -}}
+{{ partial "docs/title" . }} | Raven
+{{- end -}}

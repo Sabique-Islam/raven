@@ -1,0 +1,7 @@
+{
+  "name": "raven-web-docs",
+  "private": true,
+  "scripts": {
+    "build": "bash scripts/build.sh"
+  }
+}
