@@ -16,7 +16,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'url';
 import { discover, parseArgs as parseDiscoverArgs } from './discover.mjs';
 import { createLogger, parseLogFlags } from './lib/log.mjs';
-import { RAVEN_ROOT } from './lib/paths.mjs';
+import { RAVEN_ROOT, LAST_DISCOVER_JSON } from './lib/paths.mjs';
 import { loadProfile } from './lib/profile.mjs';
 import { loadOutreachConfig, loadOffersFromInput, rowsToCsv, writeMarkdownReview, writeXlsx, DRAFT_COLUMNS } from './lib/outreach.mjs';
 import { buildDraftRows, createDraftContext } from './lib/draft-engine.mjs';
@@ -72,14 +72,31 @@ function defaultOutputBase() {
   return path.join(DRAFTS_DIR, `outreach-${date}`);
 }
 
-async function loadOffers(opts, logger) {
-  if (opts.input) {
-    const resolved = path.resolve(opts.input);
-    if (!fs.existsSync(resolved)) throw new Error(`Input not found: ${resolved}`);
-    logger.info(`Loading jobs from ${resolved}`);
-    return loadOffersFromInput(resolved);
+function resolveInputPath(opts, logger) {
+  const candidates = [];
+  if (opts.input) candidates.push(path.resolve(opts.input));
+  if (!opts.input || opts.input === 'data/jobs.json') candidates.push(LAST_DISCOVER_JSON);
+
+  for (const p of [...new Set(candidates)]) {
+    if (fs.existsSync(p)) {
+      if (opts.input && path.resolve(opts.input) !== p) {
+        logger.warn(`${path.resolve(opts.input)} not found — using ${p}`);
+      } else if (!opts.input) {
+        logger.info(`Using latest discover: ${p}`);
+      } else {
+        logger.info(`Loading jobs from ${p}`);
+      }
+      return p;
+    }
   }
 
+  const hint = opts.input || 'data/jobs.json';
+  throw new Error(
+    `Input not found: ${hint}\nRun discover first:\n  raven discover --q "your role" --since 7\nResults auto-save to data/jobs.json`,
+  );
+}
+
+async function loadOffers(opts, logger) {
   if (opts.discoverInline) {
     logger.info('Running discover, then drafting…');
     const filters = parseDiscoverArgs(['node', 'discover.mjs', ...stripDraftFlags(opts.discoverArgv)]);
@@ -100,7 +117,8 @@ async function loadOffers(opts, logger) {
     }
   }
 
-  throw new Error('Provide --input PATH or discover flags (--q, --since, …)');
+  const inputPath = resolveInputPath(opts, logger);
+  return loadOffersFromInput(inputPath);
 }
 
 async function main() {

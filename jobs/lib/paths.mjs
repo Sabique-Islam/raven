@@ -22,3 +22,6 @@ export const SCAN_HISTORY_PATH = path.join(DATA_DIR, 'scan-history.tsv');
 export const PIPELINE_PATH = path.join(DATA_DIR, 'pipeline.md');
 export const APPLICATIONS_PATH = path.join(DATA_DIR, 'applications.md');
 export const OPENJOBDATA_SYNC_CHECKPOINT = path.join(CACHE_DIR, 'openjobdata-last-sync.json');
+
+/** Default path for discover results (auto-saved unless --no-save). */
+export const LAST_DISCOVER_JSON = process.env.RAVEN_LAST_DISCOVER || path.join(DATA_DIR, 'jobs.json');

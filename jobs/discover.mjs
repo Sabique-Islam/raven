@@ -27,7 +27,7 @@ import { fileURLToPath, pathToFileURL } from 'url';
 import { cleanChips } from './lib/filters.mjs';
 import { mergeDeduped, sortOffers, toDiscoveredOffer } from './lib/dedup.mjs';
 import { writeTempPortals, cleanupTempPortals, defaultJobBoards } from './lib/portals.mjs';
-import { JOBS_ROOT, JOBS_DB_PATH } from './lib/paths.mjs';
+import { JOBS_ROOT, JOBS_DB_PATH, LAST_DISCOVER_JSON } from './lib/paths.mjs';
 import { createLogger, parseLogFlags } from './lib/log.mjs';
 import { queryIndex } from './query-index.mjs';
 import { ALL_ATS_SOURCES } from './lib/types.js';
@@ -58,6 +58,7 @@ function parseArgs(argv) {
     limit: Math.min(5000, Math.max(1, Number(valueOf('--max')) || 1000)),
     sources,
     save: valueOf('--save'),
+    noSave: args.includes('--no-save'),
     json: logFlags.json,
     stream: logFlags.stream,
     verbose: logFlags.verbose,
@@ -303,6 +304,22 @@ async function discover(filters, logger, opts) {
   return { offers, rawTotal, deduped, labels };
 }
 
+/** Write discover results JSON for raven draft. */
+export function saveDiscoverResults(offers, meta, savePath) {
+  const target = path.resolve(savePath);
+  fs.mkdirSync(path.dirname(target), { recursive: true });
+  const payload = {
+    count: offers.length,
+    rawMatches: meta.rawTotal,
+    deduped: meta.deduped,
+    offers,
+    savedAt: new Date().toISOString(),
+    ...(meta.sources ? { sources: meta.sources } : {}),
+  };
+  fs.writeFileSync(target, JSON.stringify(payload, null, 2), 'utf8');
+  return target;
+}
+
 async function main() {
   const filters = parseArgs(process.argv);
   const opts = { stream: filters.stream, json: filters.json, verbose: filters.verbose };
@@ -326,17 +343,16 @@ async function main() {
       },
     });
 
-    if (filters.save) {
-      const savePath = path.resolve(filters.save);
-      fs.mkdirSync(path.dirname(savePath), { recursive: true });
-      fs.writeFileSync(savePath, JSON.stringify({
-        count: offers.length,
-        rawMatches: rawTotal,
+    if (!filters.noSave) {
+      const savePath = saveDiscoverResults(offers, {
+        rawTotal,
         deduped,
-        offers,
-        savedAt: new Date().toISOString(),
-      }, null, 2), 'utf8');
+        sources: filters.sources,
+      }, filters.save || LAST_DISCOVER_JSON);
       logger.info(`Saved: ${savePath}`);
+      if (!filters.quiet && offers.length) {
+        logger.info(`Next: raven draft --max 25`);
+      }
     }
 
     if (filters.json && !filters.stream) {
@@ -345,6 +361,7 @@ async function main() {
         rawMatches: rawTotal,
         deduped,
         offers,
+        savedTo: filters.noSave ? null : path.resolve(filters.save || LAST_DISCOVER_JSON),
         log: logger.logPath,
       }, null, 2) + '\n');
       return;
