@@ -44,6 +44,7 @@ Commands:
   scan-ats        Live ATS scan only (Greenhouse, Lever, Ashby, …)
   scan-boards     Board feeds (RemoteOK, Remotive, Arbeitnow, …)
   query           Search local index (after sync-jobs)
+  draft           Draft outreach emails from discovered jobs
   send            Send outreach emails from CSV/XLSX
   auth-gmail      Gmail OAuth setup
   auth-outlook    Outlook OAuth setup
@@ -53,6 +54,7 @@ Examples:
   raven discover --q "backend engineer" --loc Remote --since 7
   raven discover --q "engineer" --json
   raven sync-jobs
+  raven draft --input data/jobs.json
   raven send --input drafts/contacts.csv --dry-run
 
 Run \`raven <command> --help\` for command-specific flags.
@@ -78,6 +80,7 @@ dispatch() {
     scan-ats|scan:ats)     target="scan-ats.sh" ;;
     scan-boards|scan:boards) target="scan-boards.sh" ;;
     query|query-index)     target="query-index.sh" ;;
+    draft)        target="draft.sh" ;;
     send)         target="send.sh" ;;
     auth-gmail|auth:gmail) target="auth-gmail.sh" ;;
     auth-outlook|auth:outlook) target="auth-outlook.sh" ;;
