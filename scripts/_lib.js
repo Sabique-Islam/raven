@@ -87,6 +87,27 @@ function ensureConfig({ quiet = false } = {}) {
     fs.copyFileSync(portalsExample, portalsFile);
     if (!quiet) console.log('Created config/portals.yml from example — edit your search filters.');
   }
+
+  const outreachFile = path.join(ROOT, 'config', 'outreach.yml');
+  const outreachExample = path.join(ROOT, 'config', 'outreach.example.yml');
+  if (!fs.existsSync(outreachFile) && fs.existsSync(outreachExample)) {
+    fs.copyFileSync(outreachExample, outreachFile);
+    if (!quiet) console.log('Created config/outreach.yml from example — edit your email template.');
+  }
+
+  const profileFile = path.join(ROOT, 'config', 'profile.yml');
+  const profileExample = path.join(ROOT, 'config', 'profile.example.yml');
+  if (!fs.existsSync(profileFile) && fs.existsSync(profileExample)) {
+    fs.copyFileSync(profileExample, profileFile);
+    if (!quiet) console.log('Created config/profile.yml — add your name, links, and resume path.');
+  }
+
+  const resumeFile = path.join(ROOT, 'files', 'resume.md');
+  const resumeExample = path.join(ROOT, 'files', 'resume.example.md');
+  if (!fs.existsSync(resumeFile) && fs.existsSync(resumeExample)) {
+    fs.copyFileSync(resumeExample, resumeFile);
+    if (!quiet) console.log('Created files/resume.md from example — replace with your resume.');
+  }
 }
 
 function requireSetup() {

@@ -54,6 +54,18 @@ raven_ensure_config() {
     cp "${RAVEN_ROOT}/config/portals.example.yml" "${RAVEN_ROOT}/config/portals.yml"
     echo "Created config/portals.yml from example — edit your search filters."
   fi
+  if [[ ! -f "${RAVEN_ROOT}/config/outreach.yml" && -f "${RAVEN_ROOT}/config/outreach.example.yml" ]]; then
+    cp "${RAVEN_ROOT}/config/outreach.example.yml" "${RAVEN_ROOT}/config/outreach.yml"
+    echo "Created config/outreach.yml from example — edit your email template."
+  fi
+  if [[ ! -f "${RAVEN_ROOT}/config/profile.yml" && -f "${RAVEN_ROOT}/config/profile.example.yml" ]]; then
+    cp "${RAVEN_ROOT}/config/profile.example.yml" "${RAVEN_ROOT}/config/profile.yml"
+    echo "Created config/profile.yml — add your name, links, and resume path."
+  fi
+  if [[ ! -f "${RAVEN_ROOT}/files/resume.md" && -f "${RAVEN_ROOT}/files/resume.example.md" ]]; then
+    cp "${RAVEN_ROOT}/files/resume.example.md" "${RAVEN_ROOT}/files/resume.md"
+    echo "Created files/resume.md from example — replace with your resume."
+  fi
 }
 
 raven_require_setup() {
