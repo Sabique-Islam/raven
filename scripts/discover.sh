@@ -19,6 +19,7 @@
 #   --limit N           Max companies per ATS
 #   --max N             Max total results
 #   --json              JSON output
+#   --save PATH         Save discover results JSON (for raven draft)
 #   --stream            NDJSON stream (for a future web UI)
 #   --verbose           Per-tier detail + child process logs
 #   --quiet             Summary only

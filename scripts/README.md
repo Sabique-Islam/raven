@@ -26,6 +26,7 @@ raven discover --q "engineer" --json
 | `raven scan-ats` | Live ATS scan only |
 | `raven scan-boards` | Board feeds only |
 | `raven query` | Search local SQLite index |
+| `raven draft` | Draft outreach emails from jobs |
 | `raven send` | Email outreach from CSV/XLSX |
 | `raven auth-gmail` | Gmail OAuth |
 | `raven auth-outlook` | Outlook OAuth |
