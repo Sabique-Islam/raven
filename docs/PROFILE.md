@@ -1,76 +1,60 @@
-# Profile & drafting
+# Profile & drafting (quick reference)
 
-`config/profile.yml` is the **source of truth** for who you are when Raven drafts applications.
+> **Full documentation:** [docs/config/profile.md](config/profile.md) · [docs/cli/draft.md](cli/draft.md) · [docs/files/resume.md](files/resume.md)
+
+`config/profile.yml` is the **source of truth** for drafting.
+
+---
 
 ## Setup
 
 ```bash
-raven setup   # copies profile.example.yml → profile.yml, resume.example.md → files/resume.md
+raven setup   # copies profile.example.yml → profile.yml
 ```
 
-Edit:
+Edit identity, links, resume path, outreach templates.
 
-- **identity** — name, email, phone, location
-- **links** — resume file/URL, portfolio, GitHub, LinkedIn, X
-- **resume.path** — markdown, plain text, or PDF for parsing
-- **outreach** — email subject/body templates (optional)
+---
 
-## Resume parsing
+## Resume
 
-Raven parses `files/resume.md` (or your path) and caches structured bullets/skills in `data/cache/resume-parsed.json`.
+- Path: `files/resume.md` (or `resume.path` in profile)
+- Formats: `.md` (best), `.txt`, `.pdf`
+- Cache: `data/cache/resume-parsed.json`
+- Refresh: `raven draft --refresh-resume`
 
-Supported formats:
+---
 
-| Format | Notes |
-|--------|--------|
-| `.md` | Best — use `## Experience` with `-` bullets |
-| `.txt` | Bullet lines + `Skills:` line |
-| `.pdf` | Requires `pdf-parse` (installed in `jobs/` via setup) |
-
-Re-parse after edits:
-
-```bash
-raven draft --input data/jobs.json --refresh-resume
-```
-
-## Tailoring per job
-
-For each job, `raven draft` adds:
+## Draft output
 
 | Field | Meaning |
 |-------|---------|
-| `jd_keywords` | Terms extracted from the job title |
-| `action_words` | Suggested verbs (backend, frontend, ML, etc.) |
-| `tailored_bullets` | Top resume bullets matched to the JD |
+| `jd_keywords` | Terms from job title |
+| `action_words` | Suggested verbs |
+| `tailored_bullets` | Resume bullets matched to job |
+| `application_type` | `email` or `form` |
+| `form_steps` | ATS guide (form jobs) |
 
-## Application types
+Full column list: [drafts/README.md](drafts/README.md)
 
-| Type | When | Output |
-|------|------|--------|
-| **email** | Direct outreach possible | Subject + body + disclaimer |
-| **form** | Greenhouse, Lever, Ashby, Workday, … | Step-by-step guide in `form_steps` |
+---
 
-Form rows are **not** sent via `raven send` — follow the guide and paste your links/bullets into the ATS.
-
-## Optional Gemini plugin
-
-Add to `.env`:
+## Gemini (optional)
 
 ```bash
-GEMINI_API_KEY=your_key
+# .env: GEMINI_API_KEY=...
+raven draft --gemini
 ```
 
-```bash
-raven draft --input data/jobs.json --gemini
-```
+Email rows only. Always review before sending.
 
-Gemini polishes **email** drafts only. Every draft includes a disclaimer — **review and edit yourself** before sending or submitting.
+---
 
 ## Pipeline
 
 ```bash
-raven discover --q "backend engineer" --save data/jobs.json
-raven draft --input data/jobs.json --max 20
-# Review drafts/outreach-*.md and CSV
-raven send --input drafts/outreach-2026-07-04.csv --dry-run   # email rows only
+raven discover --q "backend engineer"
+raven draft --max 20
+# Review drafts/outreach-*.md
+raven send --input drafts/outreach-....csv --dry-run   # email rows only
 ```

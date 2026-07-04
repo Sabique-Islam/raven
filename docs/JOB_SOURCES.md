@@ -1,74 +1,62 @@
-# Supported Job Sources
+# Job sources (quick reference)
 
-Raven discovers jobs through three tiers, orchestrated by `jobs/discover.mjs`.
+> **Full documentation:** [docs/jobs/providers/README.md](jobs/providers/README.md) · [docs/cli/discover.md](cli/discover.md)
 
-## Tier 1 — Live ATS APIs (`--sources ats`)
+Raven discovers jobs through parallel tiers via `jobs/discover.mjs`.
 
-Reverse-scans public company directories and hits each platform's zero-auth API:
+---
 
-| Platform | Provider | Careers URL pattern |
-| --- | --- | --- |
-| Greenhouse | `greenhouse.mjs` | `job-boards.greenhouse.io/{slug}` |
-| Lever | `lever.mjs` | `jobs.lever.co/{slug}` |
-| Ashby | `ashby.mjs` | `jobs.ashbyhq.com/{slug}` |
-| Workday | `workday.mjs` | `{tenant}.{instance}.myworkdayjobs.com/{site}` |
-| Rippling | `rippling.mjs` | `ats.rippling.com/{slug}/jobs` |
-| Workable | `workable.mjs` | `apply.workable.com/{slug}` |
-| BambooHR | `bamboohr.mjs` | `{tenant}.bamboohr.com/careers` |
-| SmartRecruiters | `smartrecruiters.mjs` | `careers.smartrecruiters.com/{slug}` |
-| Recruitee | `recruitee.mjs` | `{slug}.recruitee.com` |
-| Pinpoint | `pinpoint.mjs` | `{slug}.pinpointhq.com` |
-| Teamtailor | `teamtailor.mjs` | `{slug}.teamtailor.com` |
-| Personio | `personio.mjs` | `{slug}.jobs.personio.de` |
+## Tier 1 — Live ATS (`--sources ats`)
 
-Company slug lists come from [job-board-aggregator](https://github.com/Feashliaa/job-board-aggregator) (Greenhouse/Lever/Ashby/Workday) or from the openjobdata companies registry after `raven sync-jobs`.
+12 platforms: Greenhouse, Lever, Ashby, Workday, Rippling, Workable, BambooHR, SmartRecruiters, Recruitee, Pinpoint, Teamtailor, Personio.
+
+```bash
+raven discover --sources ats --q "engineer" --since 7
+```
+
+---
 
 ## Tier 2 — Board feeds (`--sources boards`)
 
-Configured in `config/portals.yml` under `job_boards`:
+RemoteOK, Remotive, Arbeitnow, Landing.jobs.
 
-| Board | Provider |
-| --- | --- |
-| RemoteOK | `remoteok` |
-| Remotive | `remotive` |
-| Arbeitnow | `arbeitnow` |
-| Landing.jobs | `landingjobs` |
+```bash
+raven discover --sources boards --loc Remote
+```
 
-## Tier 3 — Local openjobdata index (`--sources index`)
+---
 
-Sync from [openjobdata.com](https://openjobdata.com/documentation) (HuggingFace bucket `Invicto69/Jobs-Dataset-bucket`):
+## Tier 3 — Local index (`--sources index`)
+
+Requires `raven sync-jobs` → `data/jobs.db`.
 
 ```bash
 raven sync-jobs
+raven discover --sources index --q "ML engineer"
+raven query --q "designer" --since 7
 ```
 
-If you get HTTP 401, set a HuggingFace read token: `export HF_TOKEN=hf_...`
+Set `HF_TOKEN` if sync returns HTTP 401.
 
-Stores jobs in `data/jobs.db` (SQLite). Also exports ATS company slug lists to `data/cache/ats-companies/` for live ATS scans.
+---
 
-```bash
-raven query --q "ML engineer" --since 3 --json
-```
-
-## Tier 4 — hiring.cafe (optional, `--sources hiringcafe`)
-
-Opt-in only — Cloudflare may block datacenter IPs.
+## Tier 4 — hiring.cafe (optional)
 
 ```bash
 export HIRING_CAFE_ENABLED=1
-# Optional Apify fallback:
-export APIFY_TOKEN=...
-export HIRING_CAFE_APIFY_ACTOR=manojachari/hiring-cafe-scraper
+raven discover --sources hiringcafe
 ```
 
-Results are marked `verification: unconfirmed`.
+Results marked `verification: unconfirmed`.
 
-## Unified discovery
+---
+
+## Unified discover
 
 ```bash
 raven discover --q "software engineer" --loc Remote --since 7
-raven discover --sources ats,boards,index --json
-raven discover --stream --q "backend developer"
 ```
 
-Filter flags: `--q`, `--not`, `--loc`, `--noloc`, `--home`, `--since`, `--ats`, `--limit`, `--max`.
+Default sources: `ats,boards,index`. Filters: `--q`, `--not`, `--loc`, `--since`, `--ats`, `--max`.
+
+See [config/portals.md](config/portals.md) for YAML filter config.
