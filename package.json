@@ -14,6 +14,7 @@
     "scan:ats": "bash bin/raven scan-ats",
     "scan:boards": "bash bin/raven scan-boards",
     "query": "bash bin/raven query",
+    "draft": "bash bin/raven draft",
     "send": "bash bin/raven send",
     "auth:gmail": "bash bin/raven auth-gmail",
     "auth:outlook": "bash bin/raven auth-outlook"

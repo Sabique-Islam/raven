@@ -79,11 +79,22 @@ web_modules/
 .env.production.local
 .env.local
 
-# Raven job index (sync with npm run sync-jobs)
+# Raven — user config & local data (templates: config/*.example.yml, files/resume.example.md)
+config/profile.yml
+config/portals.yml
+config/outreach.yml
+files/resume.md
+files/resume.pdf
+files/resume.txt
 data/jobs.db
 data/cache/
+data/logs/
+data/*.json
 data/scan-history.tsv
 data/pipeline.md
+data/applications.md
+drafts/outreach-*
+drafts/*.xlsx
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
