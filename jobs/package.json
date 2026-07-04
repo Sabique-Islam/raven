@@ -16,6 +16,7 @@
     "better-sqlite3": "^11.10.0",
     "dotenv": "^17.3.1",
     "js-yaml": "^4.1.1",
-    "parquetjs-lite": "^0.8.7"
+    "parquetjs-lite": "^0.8.7",
+    "pdf-parse": "^1.1.4"
   }
 }

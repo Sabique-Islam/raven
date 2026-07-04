@@ -57,6 +57,7 @@ function parseArgs(argv) {
     limitPerAts: Math.min(500, Math.max(50, Number(valueOf('--limit')) || 150)),
     limit: Math.min(5000, Math.max(1, Number(valueOf('--max')) || 1000)),
     sources,
+    save: valueOf('--save'),
     json: logFlags.json,
     stream: logFlags.stream,
     verbose: logFlags.verbose,
@@ -324,6 +325,19 @@ async function main() {
         sources: filters.sources.join(','),
       },
     });
+
+    if (filters.save) {
+      const savePath = path.resolve(filters.save);
+      fs.mkdirSync(path.dirname(savePath), { recursive: true });
+      fs.writeFileSync(savePath, JSON.stringify({
+        count: offers.length,
+        rawMatches: rawTotal,
+        deduped,
+        offers,
+        savedAt: new Date().toISOString(),
+      }, null, 2), 'utf8');
+      logger.info(`Saved: ${savePath}`);
+    }
 
     if (filters.json && !filters.stream) {
       process.stdout.write(JSON.stringify({
