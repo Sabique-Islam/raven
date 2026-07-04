@@ -5,6 +5,23 @@ Unified parallel job search across ATS APIs, board feeds, and optional local ind
 **Module:** `jobs/discover.mjs`  
 **Default output:** `data/jobs.json`
 
+> **How it works (architecture):** [jobs/discovery-deep-dive.md](../jobs/discovery-deep-dive.md) — tiers, reverse ATS scan, WebSearch status, interview Q&A.
+
+---
+
+## How discovery works (summary)
+
+`raven discover` is **not** a web search engine. It:
+
+1. Runs **ATS**, **boards**, and **index** tiers **in parallel** (default)
+2. Fetches jobs from **public JSON APIs and feeds** — no browser, no Google
+3. Filters by title/location from `portals.yml` or CLI flags
+4. Deduplicates by canonical apply URL
+5. Saves to `data/jobs.json`
+
+Optional: `--sources hiringcafe` (env-gated).  
+Not automated: `search_queries` / `scan_method: websearch` in portals.yml — see [scan-strategies.md](../jobs/scan-strategies.md).
+
 ---
 
 ## Usage
@@ -127,6 +144,9 @@ raven discover --sources index --q "ML engineer" --since 14
 
 ## Related
 
+- [jobs/discovery-deep-dive.md](../jobs/discovery-deep-dive.md)
 - [jobs/discover-engine.md](../jobs/discover-engine.md)
+- [jobs/scan-strategies.md](../jobs/scan-strategies.md)
 - [jobs/filters.md](../jobs/filters.md)
 - [config/portals.md](../config/portals.md)
+- [DEEP_DIVES.md](../DEEP_DIVES.md)

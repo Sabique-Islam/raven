@@ -6,7 +6,9 @@ bookCollapseSection: true
 
 # Job Discovery
 
-Raven searches for jobs through **parallel tiers** — live ATS APIs, public board feeds, and an optional local openjobdata index — then deduplicates and saves results to `data/jobs.json`.
+Raven finds jobs through **parallel structured API tiers** — live ATS JSON endpoints, public board feeds, and an optional local openjobdata index — then deduplicates and saves results to `data/jobs.json`.
+
+**Not open-web search:** Google/WebSearch (`search_queries` in portals.yml) is documented but **not executed** by discover today. See [How discovery works →](how-it-works/) and [Scan strategies →](scan-strategies/).
 
 ## Pages in this section
 
@@ -41,4 +43,4 @@ Default runs all three in parallel.
 
 Results auto-save to **`data/jobs.json`** unless you pass `--no-save`.
 
-Start with [Sources & tiers →](sources/)
+Start with [How discovery works →](how-it-works/) or [Sources & tiers →](sources/)

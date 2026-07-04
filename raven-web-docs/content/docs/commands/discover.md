@@ -7,6 +7,8 @@ weight: 10
 
 Unified job search across ATS APIs, board feeds, and optional local index.
 
+> **Architecture:** [How discovery works](../job-discovery/how-it-works/) — tiers, reverse ATS scan, WebSearch status.
+
 ## Usage
 
 ```bash
@@ -18,6 +20,7 @@ raven discover --json
 
 ## Behavior
 
+- **Not open-web search** — fetches public JSON APIs and board feeds (see [how it works](../job-discovery/how-it-works/))
 - Loads title/location filters from **`config/portals.yml`** by default
 - CLI flags (`--q`, `--loc`, …) **extend** config filters
 - Runs tiers **in parallel**

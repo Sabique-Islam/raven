@@ -12,6 +12,7 @@ Complete reference for the Raven CLI: job discovery, tailored drafting, and emai
 |-----|-------------------|
 | [Architecture](ARCHITECTURE.md) | Repo layout, layers, how bash + Node fit together |
 | [Pipeline](PIPELINE.md) | Discover → Draft → Send flow with diagrams |
+| [Deep dives](DEEP_DIVES.md) | **Technical & interview-style** — how discovery really works, scan strategies, draft pipeline |
 | [File layout](FILE_LAYOUT.md) | Every directory and path constant |
 
 ---
@@ -51,6 +52,9 @@ Overview: [config/README.md](config/README.md)
 
 | Topic | Doc |
 |-------|-----|
+| **Discovery deep dive** | [jobs/discovery-deep-dive.md](jobs/discovery-deep-dive.md) |
+| Scan strategies (WebSearch status) | [jobs/scan-strategies.md](jobs/scan-strategies.md) |
+| **Draft deep dive** | [jobs/draft-deep-dive.md](jobs/draft-deep-dive.md) |
 | Discover orchestrator | [jobs/discover-engine.md](jobs/discover-engine.md) |
 | Draft orchestrator | [jobs/draft-engine.md](jobs/draft-engine.md) |
 | Filters | [jobs/filters.md](jobs/filters.md) |
@@ -59,7 +63,7 @@ Overview: [config/README.md](config/README.md)
 | Library modules | [jobs/lib/README.md](jobs/lib/README.md) |
 | Providers | [jobs/providers/README.md](jobs/providers/README.md) |
 
-Overview: [jobs/README.md](jobs/README.md)
+Overview: [jobs/README.md](jobs/README.md) · Index: [DEEP_DIVES.md](DEEP_DIVES.md)
 
 ---
 

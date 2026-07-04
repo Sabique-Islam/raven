@@ -147,6 +147,23 @@ Form-application rows skip send — user follows `form_steps` in browser.
 
 ---
 
+## Discovery model (important)
+
+`raven discover` does **not** search the open web (Google/Bing). It runs **parallel structured tiers**:
+
+| Tier | Mechanism |
+|------|-----------|
+| ATS | Reverse-scan public company directories → each company's public JSON API (12 platforms) |
+| Boards | Aggregator feed APIs (RemoteOK, Remotive, Arbeitnow, Landing.jobs) |
+| Index | Local SQLite from openjobdata (`raven sync-jobs`) |
+| hiring.cafe | Optional POST API (`HIRING_CAFE_ENABLED=1`) |
+
+Results are filtered client-side, deduplicated by canonical apply URL, and saved to JSON.
+
+`portals.yml` also documents **WebSearch** (`search_queries`, `scan_method: websearch`) — these are **not executed** by discover today. See [jobs/discovery-deep-dive.md](jobs/discovery-deep-dive.md) and [jobs/scan-strategies.md](jobs/scan-strategies.md).
+
+---
+
 ## Dependencies
 
 | Package | Location | Purpose |
@@ -170,5 +187,7 @@ Install via `raven setup` → `npm install` in root and `jobs/`.
 ## Related docs
 
 - [Pipeline](PIPELINE.md) — step-by-step workflow
+- [Deep dives](DEEP_DIVES.md) — technical architecture index
+- [jobs/discovery-deep-dive.md](jobs/discovery-deep-dive.md) — how job search works
 - [File layout](FILE_LAYOUT.md) — every path
 - [jobs/README.md](jobs/README.md) — engine internals

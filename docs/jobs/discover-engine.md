@@ -2,6 +2,8 @@
 
 **Module:** `jobs/discover.mjs`
 
+> **Architecture overview:** [discovery-deep-dive.md](discovery-deep-dive.md) — how tiers work, what is *not* web search, interview Q&A.
+
 ---
 
 ## Exports
@@ -51,9 +53,27 @@ Event kinds: `start`, `atsDone`, `boardsDone`, `indexDone`, `offer`, `summary`, 
 
 ---
 
+## Child process contract
+
+ATS and boards tiers spawn Node children instead of importing scan modules:
+
+| Child | Args | Env |
+|-------|------|-----|
+| `scan-ats-full.mjs` | `--dry-run --json --since N --ats … --limit N` | `RAVEN_PORTALS=<temp yml>` |
+| `scan.mjs` | `--dry-run --boards-only --json` | `RAVEN_PORTALS=<temp yml>` |
+
+Stdout must contain a single JSON object with `{ offers: [...] }`. Discover parses the last JSON line if mixed with logs.
+
+Index and hiring.cafe tiers run **in-process** (no spawn).
+
+---
+
 ## Related
 
+- [discovery-deep-dive.md](discovery-deep-dive.md) — full architecture
+- [scan-strategies.md](scan-strategies.md) — WebSearch / Playwright status
 - [cli/discover.md](../cli/discover.md)
 - [filters.md](filters.md)
 - [dedup.md](dedup.md)
 - [providers/README.md](providers/README.md)
+- [DEEP_DIVES.md](../DEEP_DIVES.md)

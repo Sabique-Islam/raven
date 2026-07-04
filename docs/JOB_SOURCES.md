@@ -1,8 +1,8 @@
 # Job sources (quick reference)
 
-> **Full documentation:** [docs/jobs/providers/README.md](jobs/providers/README.md) · [docs/cli/discover.md](cli/discover.md)
+> **Architecture:** [docs/jobs/discovery-deep-dive.md](jobs/discovery-deep-dive.md) · **Providers:** [docs/jobs/providers/README.md](jobs/providers/README.md) · **CLI:** [docs/cli/discover.md](cli/discover.md)
 
-Raven discovers jobs through parallel tiers via `jobs/discover.mjs`.
+Raven discovers jobs through **parallel structured API tiers** via `jobs/discover.mjs` — not open-web search.
 
 ---
 
@@ -58,5 +58,14 @@ raven discover --q "software engineer" --loc Remote --since 7
 ```
 
 Default sources: `ats,boards,index`. Filters: `--q`, `--not`, `--loc`, `--since`, `--ats`, `--max`.
+
+### Not automated
+
+| Config | Status |
+|--------|--------|
+| `search_queries` in portals.yml | Documented; **not executed** by discover |
+| `scan_method: websearch` | Handoff log only in scan.mjs |
+
+See [jobs/scan-strategies.md](jobs/scan-strategies.md).
 
 See [config/portals.md](config/portals.md) for YAML filter config.

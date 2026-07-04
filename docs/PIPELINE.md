@@ -47,6 +47,29 @@ Creates `.env`, `config/*.yml`, `files/resume.md` from examples. See [cli/setup.
 
 Saves to `data/jobs.json`. See [cli/discover.md](cli/discover.md).
 
+### What happens under the hood
+
+```mermaid
+flowchart LR
+  D[discover.mjs] --> A[ATS reverse scan]
+  D --> B[Board feeds]
+  D --> I[SQLite index]
+  A --> M[merge + dedup]
+  B --> M
+  I --> M
+  M --> J[data/jobs.json]
+```
+
+| Tier | Source | Prep |
+|------|--------|------|
+| ATS | 12 platforms × N companies via public APIs | None |
+| Boards | RemoteOK, Remotive, Arbeitnow, Landing.jobs | None |
+| Index | `data/jobs.db` from openjobdata | `raven sync-jobs` |
+
+**Not included:** Google/WebSearch (`search_queries` in portals.yml is config-only today).
+
+Deep dive: [jobs/discovery-deep-dive.md](jobs/discovery-deep-dive.md)
+
 ---
 
 ## Phase 3 — Draft
@@ -56,6 +79,8 @@ Saves to `data/jobs.json`. See [cli/discover.md](cli/discover.md).
 ```
 
 Writes `drafts/outreach-*.csv` and `.md`. See [cli/draft.md](cli/draft.md).
+
+Deep dive: [jobs/draft-deep-dive.md](jobs/draft-deep-dive.md) — email vs form, tailoring, Gemini opt-in.
 
 ---
 

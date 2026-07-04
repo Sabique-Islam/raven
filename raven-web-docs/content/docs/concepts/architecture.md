@@ -47,9 +47,13 @@ One module per ATS or board feed. Each exports `{ id, fetch, detect? }` and uses
 
 ## Data flow
 
-1. **Discover** — parallel HTTP/API calls → deduplicated offers → `data/jobs.json`
+1. **Discover** — parallel HTTP/API calls → deduplicated offers → `data/jobs.json` ([details](../job-discovery/how-it-works/))
 2. **Draft** — load profile + parse resume → tailor per job → CSV/MD
 3. **Send** — read CSV → Gmail/Outlook API
+
+## Discovery model
+
+`raven discover` runs **ATS reverse scan**, **board feeds**, and **local index** in parallel. It does not call Google or execute `search_queries` from portals.yml ([scan strategies](../job-discovery/scan-strategies/)).
 
 ## Design principles
 

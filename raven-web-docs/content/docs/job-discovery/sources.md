@@ -5,7 +5,9 @@ weight: 10
 
 # Job sources
 
-Raven orchestrates three primary discovery tiers in parallel via `jobs/discover.mjs`.
+Raven orchestrates discovery tiers in parallel via `jobs/discover.mjs`. Each tier uses **public APIs or feeds** — not web search engines.
+
+> Full architecture: [How discovery works](how-it-works/) · WebSearch status: [Scan strategies](scan-strategies/)
 
 ## Tier 1 — Live ATS APIs (`--sources ats`)
 
@@ -79,6 +81,15 @@ export HIRING_CAFE_APIFY_ACTOR=manojachari/hiring-cafe-scraper
 ```
 
 Results are marked `verification: unconfirmed`.
+
+## Not automated — WebSearch
+
+| Config | Status |
+|--------|--------|
+| `search_queries` in portals.yml | Documented; not executed |
+| `scan_method: websearch` | Handoff log only in scan.mjs |
+
+See [Scan strategies](scan-strategies/).
 
 ## Unified discovery
 

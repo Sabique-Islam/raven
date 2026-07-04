@@ -128,7 +128,7 @@ See `portals.example.yml` for hundreds of example company entries and provider-s
 
 ### `search_queries`
 
-WebSearch-based discovery queries:
+WebSearch-based discovery queries (documented in `portals.example.yml`):
 
 ```yaml
 search_queries:
@@ -143,7 +143,14 @@ search_queries:
 | `query` | Search string (often `site:` filtered) |
 | `enabled` | Include in scan when `true` |
 
+> **Implementation status:** `search_queries` is **not read** by `discover.mjs` or `scan.mjs` today. Entries are safe to keep as documentation or for manual/agent workflows; they do not affect `raven discover` output. See [jobs/scan-strategies.md](../jobs/scan-strategies.md).
+
+### `scan_method: websearch`
+
+When a `tracked_companies` entry has `scan_method: websearch` and no HTTP provider matches, `scan.mjs` logs an **Agent/WebSearch handoff** hint at the end of the run — it does **not** execute the search or add offers to results.
+
 ---
+
 
 ## CLI vs config
 
@@ -180,5 +187,7 @@ location_filter:
 
 ## Related
 
+- [jobs/discovery-deep-dive.md](../jobs/discovery-deep-dive.md) — how discover uses these filters
+- [jobs/scan-strategies.md](../jobs/scan-strategies.md) — what runs vs. config-only
 - [cli/discover.md](../cli/discover.md)
 - [jobs/filters.md](../jobs/filters.md)

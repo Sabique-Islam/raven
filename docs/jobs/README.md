@@ -29,11 +29,15 @@ All job discovery and drafting logic lives in `jobs/` as ESM modules.
 
 ## Deep dives
 
+- [discovery-deep-dive.md](discovery-deep-dive.md) — how job search works (start here)
+- [scan-strategies.md](scan-strategies.md) — WebSearch / Playwright implementation status
+- [draft-deep-dive.md](draft-deep-dive.md) — email vs form, tailoring
 - [discover-engine.md](discover-engine.md)
 - [draft-engine.md](draft-engine.md)
 - [filters.md](filters.md)
 - [dedup.md](dedup.md)
 - [logging.md](logging.md)
+- [../DEEP_DIVES.md](../DEEP_DIVES.md) — index
 
 ---
 

@@ -2,6 +2,8 @@
 
 **Modules:** `jobs/draft-outreach.mjs`, `jobs/lib/draft-engine.mjs`
 
+> **Architecture overview:** [draft-deep-dive.md](draft-deep-dive.md) — classification, tailoring, Gemini, interview Q&A.
+
 ---
 
 ## Flow
@@ -49,6 +51,8 @@ Sets `ai_draft`: `yes`, `no`, or `fallback`.
 
 ## Related
 
+- [draft-deep-dive.md](draft-deep-dive.md)
 - [cli/draft.md](../cli/draft.md)
 - [drafts/README.md](../drafts/README.md)
 - [lib/README.md](lib/README.md)
+- [DEEP_DIVES.md](../DEEP_DIVES.md)
