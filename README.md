@@ -332,10 +332,13 @@ Expected:
 
 ## Documentation
 
-- **[raven-web-docs/](https://raven.nopejs.me)**
-- [docs/JOB_SOURCES.md](docs/JOB_SOURCES.md) — supported ATS platforms and discovery tiers
-- [docs/PROFILE.md](docs/PROFILE.md) — resume parsing, JD tailoring, Gemini plugin, form guides
-- [scripts/README.md](scripts/README.md) — CLI layout and logging
+- **[raven.nopejs.me](https://raven.nopejs.me)**
+- **[docs/README.md](docs/README.md)** — full project documentation (architecture, CLI, config, data formats)
+- **[raven-web-docs/](https://raven.nopejs.me)** — Hugo docs site
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · [docs/PIPELINE.md](docs/PIPELINE.md)
+- [docs/cli/discover.md](docs/cli/discover.md) · [docs/cli/draft.md](docs/cli/draft.md)
+- [docs/config/portals.md](docs/config/portals.md) · [docs/config/profile.md](docs/config/profile.md)
+- [docs/JOB_SOURCES.md](docs/JOB_SOURCES.md) · [docs/PROFILE.md](docs/PROFILE.md) — quick references
 
 ---
 
