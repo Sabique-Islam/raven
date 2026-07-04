@@ -11,6 +11,7 @@ export const RAVEN_ROOT = path.resolve(JOBS_ROOT, '..');
 
 export const DATA_DIR = path.join(RAVEN_ROOT, 'data');
 export const CACHE_DIR = path.join(DATA_DIR, 'cache');
+export const LOGS_DIR = path.join(DATA_DIR, 'logs');
 export const CONFIG_DIR = path.join(RAVEN_ROOT, 'config');
 export const PROVIDERS_DIR = path.join(JOBS_ROOT, 'providers');
 
