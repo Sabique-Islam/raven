@@ -332,7 +332,7 @@ Expected:
 
 ## Documentation
 
-- **[raven-web-docs/](raven-web-docs/)** — full Hugo docs site (`cd raven-web-docs && hugo server`)
+- **[raven-web-docs/](https://raven.nopejs.me)**
 - [docs/JOB_SOURCES.md](docs/JOB_SOURCES.md) — supported ATS platforms and discovery tiers
 - [docs/PROFILE.md](docs/PROFILE.md) — resume parsing, JD tailoring, Gemini plugin, form guides
 - [scripts/README.md](scripts/README.md) — CLI layout and logging
