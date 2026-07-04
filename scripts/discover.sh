@@ -19,7 +19,8 @@
 #   --limit N           Max companies per ATS
 #   --max N             Max total results
 #   --json              JSON output
-#   --save PATH         Save discover results JSON (for raven draft)
+#   --save PATH         Custom save path (default: data/jobs.json)
+#   --no-save           Skip writing data/jobs.json
 #   --stream            NDJSON stream (for a future web UI)
 #   --verbose           Per-tier detail + child process logs
 #   --quiet             Summary only
@@ -36,6 +37,9 @@ show_help() {
     "  raven discover --q \"software engineer\" --loc Remote --since 7" \
     "  raven discover --q \"backend\" --json" \
     "  raven discover --stream --q \"data engineer\"" \
+    "" \
+    "Results auto-save to data/jobs.json (then: raven draft --max 25)" \
+    "Use --no-save to skip, or --save PATH for a custom file" \
     "  raven discover --sources ats,boards --ats greenhouse,lever,ashby" \
     "" \
     "Sources (--sources):" \
