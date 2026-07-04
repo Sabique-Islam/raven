@@ -56,6 +56,12 @@ Examples:
   raven send --input drafts/contacts.csv --dry-run
 
 Run \`raven <command> --help\` for command-specific flags.
+
+Logging (all job commands):
+  Progress + stats on screen; logs saved to data/logs/ by default.
+  --verbose   extra detail    --quiet   summary only
+  --log       force log file  --no-log  disable log file
+
 Docs: README.md · docs/JOB_SOURCES.md
 
 EOF
