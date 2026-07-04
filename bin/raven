@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+# raven — Raven CLI: job discovery + email outreach
+#
+# Usage:
+#   raven --help
+#   raven setup
+#   raven discover --q "software engineer" --loc Remote --since 7
+#   raven sync-jobs
+#   raven send --input contacts.csv --dry-run
+#
+# Install globally (optional):
+#   npm link
+
+set -euo pipefail
+
+# Resolve real path when invoked via npm link (e.g. /opt/homebrew/bin/raven → repo/bin/raven).
+_raven_script_dir() {
+  local source="${BASH_SOURCE[0]}"
+  while [[ -L "$source" ]]; do
+    local dir
+    dir="$(cd "$(dirname "$source")" && pwd -P)"
+    source="$(readlink "$source")"
+    [[ "$source" != /* ]] && source="${dir}/${source}"
+  done
+  cd "$(dirname "$source")" && pwd -P
+}
+
+RAVEN_BIN_DIR="$(_raven_script_dir)"
+RAVEN_ROOT="$(cd "${RAVEN_BIN_DIR}/.." && pwd -P)"
+SCRIPTS_DIR="${RAVEN_ROOT}/scripts"
+export RAVEN_ROOT
+
+show_help() {
+  cat <<EOF
+Raven — Discover → Save → Outreach
+
+Usage:
+  raven <command> [options]
+
+Commands:
+  setup           First-time install (npm deps + config)
+  discover        Unified job search (ATS + boards + local index)
+  sync-jobs       Download openjobdata → data/jobs.db
+  scan-ats        Live ATS scan only (Greenhouse, Lever, Ashby, …)
+  scan-boards     Board feeds (RemoteOK, Remotive, Arbeitnow, …)
+  query           Search local index (after sync-jobs)
+  send            Send outreach emails from CSV/XLSX
+  auth-gmail      Gmail OAuth setup
+  auth-outlook    Outlook OAuth setup
+
+Examples:
+  raven setup
+  raven discover --q "backend engineer" --loc Remote --since 7
+  raven discover --q "engineer" --json
+  raven sync-jobs
+  raven send --input drafts/contacts.csv --dry-run
+
+Run \`raven <command> --help\` for command-specific flags.
+Docs: README.md · docs/JOB_SOURCES.md
+
+EOF
+}
+
+dispatch() {
+  local cmd="$1"
+  shift
+  local target=""
+  case "$cmd" in
+    setup)        target="setup.sh" ;;
+    discover)     target="discover.sh" ;;
+    sync-jobs)    target="sync-jobs.sh" ;;
+    scan-ats|scan:ats)     target="scan-ats.sh" ;;
+    scan-boards|scan:boards) target="scan-boards.sh" ;;
+    query|query-index)     target="query-index.sh" ;;
+    send)         target="send.sh" ;;
+    auth-gmail|auth:gmail) target="auth-gmail.sh" ;;
+    auth-outlook|auth:outlook) target="auth-outlook.sh" ;;
+    help)         show_help; exit 0 ;;
+    *)
+      echo "Unknown command: ${cmd}" >&2
+      echo "Run: raven --help" >&2
+      exit 1
+      ;;
+  esac
+  exec "${SCRIPTS_DIR}/${target}" "$@"
+}
+
+# raven --help  OR  raven  OR  raven help
+if [[ $# -eq 0 ]]; then
+  show_help
+  exit 0
+fi
+
+if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+  if [[ $# -eq 1 ]]; then
+    show_help
+    exit 0
+  fi
+  # raven --help discover → treat discover as command with --help
+  shift
+fi
+
+if [[ "$1" == "help" && $# -eq 1 ]]; then
+  show_help
+  exit 0
+fi
+
+dispatch "$@"
