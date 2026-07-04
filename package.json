@@ -1,8 +1,23 @@
 {
-  "name": "email-sender",
-  "version": "1.0.0",
-  "description": "Standalone Gmail/Outlook email sender",
+  "name": "raven",
+  "version": "2.0.0",
+  "description": "Job discovery + Gmail/Outlook outreach",
   "type": "commonjs",
+  "bin": {
+    "raven": "./bin/raven"
+  },
+  "scripts": {
+    "setup": "bash bin/raven setup",
+    "help": "bash bin/raven --help",
+    "discover": "bash bin/raven discover",
+    "sync-jobs": "bash bin/raven sync-jobs",
+    "scan:ats": "bash bin/raven scan-ats",
+    "scan:boards": "bash bin/raven scan-boards",
+    "query": "bash bin/raven query",
+    "send": "bash bin/raven send",
+    "auth:gmail": "bash bin/raven auth-gmail",
+    "auth:outlook": "bash bin/raven auth-outlook"
+  },
   "dependencies": {
     "csv-parse": "^6.2.0",
     "csv-stringify": "^6.7.0",

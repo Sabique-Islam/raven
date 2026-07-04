@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Local wrapper — run Raven from repo root without npm link.
+exec "$(cd "$(dirname "$0")" && pwd)/bin/raven" "$@"
