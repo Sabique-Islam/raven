@@ -1,0 +1,21 @@
+{
+  "name": "@raven/jobs",
+  "version": "1.0.0",
+  "description": "Raven hybrid job discovery — live ATS, board feeds, openjobdata index",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "discover": "node discover.mjs",
+    "scan": "node scan.mjs",
+    "scan:full": "node scan-ats-full.mjs",
+    "sync": "node sync-openjobdata.mjs",
+    "query": "node query-index.mjs"
+  },
+  "dependencies": {
+    "@huggingface/hub": "^2.13.2",
+    "better-sqlite3": "^11.10.0",
+    "dotenv": "^17.3.1",
+    "js-yaml": "^4.1.1",
+    "parquetjs-lite": "^0.8.7"
+  }
+}

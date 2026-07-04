@@ -341,6 +341,8 @@ async function main() {
       return;
     }
 
+    if (filters.quiet) return;
+
     if (offers.length) {
       logger.info('');
       logger.info(`Top matches (${Math.min(30, offers.length)} of ${offers.length}):`);
