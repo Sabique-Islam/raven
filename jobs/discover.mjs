@@ -26,7 +26,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { cleanChips } from './lib/filters.mjs';
 import { mergeDeduped, sortOffers, toDiscoveredOffer } from './lib/dedup.mjs';
-import { writeTempPortals, cleanupTempPortals, defaultJobBoards } from './lib/portals.mjs';
+import { writeTempPortals, cleanupTempPortals, defaultJobBoards, resolveDiscoverFilters } from './lib/portals.mjs';
 import { JOBS_ROOT, JOBS_DB_PATH, LAST_DISCOVER_JSON } from './lib/paths.mjs';
 import { createLogger, parseLogFlags } from './lib/log.mjs';
 import { queryIndex } from './query-index.mjs';
@@ -164,7 +164,7 @@ function runBoardsScan(filters, logger, opts) {
       allow: filters.allow,
       block: filters.block,
       alwaysAllow: filters.alwaysAllow,
-      job_boards: defaultJobBoards(),
+      job_boards: filters.portalsJobBoards || defaultJobBoards(),
     });
     const args = [
       path.join(JOBS_ROOT, 'scan.mjs'),
@@ -227,7 +227,12 @@ async function discover(filters, logger, opts) {
   emit({ kind: 'start', sources: filters.sources, sinceDays: filters.sinceDays, free: true }, opts);
 
   logger.info(`Raven discover — sources: ${filters.sources.join(', ')} | since ${filters.sinceDays}d | max ${filters.limit}`);
-  if (filters.positive.length) logger.info(`  keywords: ${filters.positive.join(', ')}`);
+  if (filters.positive.length) {
+    logger.info(`  title keywords: ${filters.positive.join(', ')}`);
+  } else {
+    logger.warn('No title keywords — edit config/portals.yml or pass --q "software engineer"');
+  }
+  if (filters.negative.length) logger.verbose(`  exclude: ${filters.negative.join(', ')}`);
   if (filters.allow.length) logger.info(`  locations: ${filters.allow.join(', ')}`);
   if (filters.ats.length && filters.sources.includes('ats')) {
     logger.verbose(`  ATS: ${filters.ats.join(', ')} (${filters.limitPerAts} companies/platform)`);
@@ -321,7 +326,8 @@ export function saveDiscoverResults(offers, meta, savePath) {
 }
 
 async function main() {
-  const filters = parseArgs(process.argv);
+  const rawFilters = parseArgs(process.argv);
+  const filters = resolveDiscoverFilters(rawFilters);
   const opts = { stream: filters.stream, json: filters.json, verbose: filters.verbose };
   const logger = createLogger('discover', {
     json: filters.json,

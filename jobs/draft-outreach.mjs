@@ -15,6 +15,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'url';
 import { discover, parseArgs as parseDiscoverArgs } from './discover.mjs';
+import { resolveDiscoverFilters } from './lib/portals.mjs';
 import { createLogger, parseLogFlags } from './lib/log.mjs';
 import { RAVEN_ROOT, LAST_DISCOVER_JSON } from './lib/paths.mjs';
 import { loadProfile } from './lib/profile.mjs';
@@ -99,7 +100,7 @@ function resolveInputPath(opts, logger) {
 async function loadOffers(opts, logger) {
   if (opts.discoverInline) {
     logger.info('Running discover, then drafting…');
-    const filters = parseDiscoverArgs(['node', 'discover.mjs', ...stripDraftFlags(opts.discoverArgv)]);
+    const filters = resolveDiscoverFilters(parseDiscoverArgs(['node', 'discover.mjs', ...stripDraftFlags(opts.discoverArgv)]));
     filters.json = true;
     filters.quiet = opts.quiet;
     const discoverLogger = createLogger('discover', {

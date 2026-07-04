@@ -2,7 +2,9 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
+import yaml from 'js-yaml';
 import { cleanChips } from './filters.mjs';
+import { PORTALS_PATH } from './paths.mjs';
 
 /**
  * Serialize ephemeral filter state into a minimal portals.yml for scanners.
@@ -57,6 +59,46 @@ export function defaultJobBoards() {
     { name: 'Arbeitnow', provider: 'arbeitnow', enabled: true },
     { name: 'Landing.jobs', provider: 'landingjobs', enabled: true },
   ];
+}
+
+/** Read title/location filters from config/portals.yml. */
+export function loadPortalsFilters() {
+  if (!fs.existsSync(PORTALS_PATH)) {
+    return { positive: [], negative: [], allow: [], block: [], alwaysAllow: [], job_boards: null };
+  }
+  const cfg = yaml.load(fs.readFileSync(PORTALS_PATH, 'utf8')) || {};
+  return {
+    positive: cleanChips(cfg.title_filter?.positive || []),
+    negative: cleanChips(cfg.title_filter?.negative || []),
+    allow: cleanChips(cfg.location_filter?.allow || []),
+    block: cleanChips(cfg.location_filter?.block || []),
+    alwaysAllow: cleanChips(cfg.location_filter?.always_allow || []),
+    job_boards: Array.isArray(cfg.job_boards) ? cfg.job_boards : null,
+  };
+}
+
+/**
+ * Merge CLI filter flags with config/portals.yml (CLI extends config; config fills gaps).
+ * @param {object} cli from discover parseArgs
+ */
+export function resolveDiscoverFilters(cli) {
+  const fromPortals = loadPortalsFilters();
+  const mergeList = (a, b) => cleanChips([...(a || []), ...(b || [])]);
+  const positive = mergeList(fromPortals.positive, cli.positive);
+  const negative = mergeList(fromPortals.negative, cli.negative);
+  const allow = cli.allow.length ? cli.allow : fromPortals.allow;
+  const block = mergeList(fromPortals.block, cli.block);
+  const alwaysAllow = mergeList(fromPortals.alwaysAllow, cli.alwaysAllow);
+  return {
+    ...cli,
+    positive,
+    negative,
+    allow,
+    block,
+    alwaysAllow,
+    portalsJobBoards: fromPortals.job_boards,
+    filtersFromPortals: fromPortals,
+  };
 }
 
 export { cleanChips };
