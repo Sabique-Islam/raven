@@ -1,0 +1,43 @@
+# Legacy outreach template — prefer config/profile.yml (source of truth).
+# profile.yml holds identity, links, resume path, and outreach templates.
+#
+# Placeholders: {{company}} {{title}} {{location}} {{url}} {{postedAt}} {{ats}}
+#               {{senderName}} {{senderEmail}} {{greeting}} {{highlights}}
+
+# Shown in email sign-off (falls back to SENDER_NAME / SENDER_EMAIL in .env)
+sender:
+  name: ""
+  email: ""
+
+# Greeting when contact is generic (careers@, hiring@, hello@, team@)
+greeting_generic: "Hey team"
+
+# Application email subject line
+subject: "Application: {{title}} at {{company}}"
+
+# Email body — keep bullets exactly as listed under highlights
+body: |
+  {{greeting}},
+
+  {{#if company_hook}}{{company_hook}}
+
+  {{/if}}I'm writing about the {{title}} role at {{company}}{{#if location}} ({{location}}){{/if}}.
+
+  {{highlights}}
+
+  I'd welcome a chance to talk about the role. Listing: {{url}}
+
+  Best,
+  {{senderName}}
+
+# Resume bullets (• added automatically). Edit these to match your background.
+highlights:
+  - "Shipped production systems end to end"
+  - "Comfortable across backend, infra, and product-facing work"
+  - "Looking for a team where I can contribute from day one"
+
+# Optional hook about the company — leave empty to skip (do not invent product names)
+company_hook: ""
+
+# When --guess-email is set, try careers@ on the apply URL's domain (skipped for job-board hosts)
+guess_email: false

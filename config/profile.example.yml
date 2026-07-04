@@ -1,0 +1,55 @@
+# Your source of truth for raven draft — copied to config/profile.yml on setup.
+# Used for tailored emails, form-fill guides, and optional Gemini drafts.
+
+identity:
+  name: "Your Name"
+  email: "you@example.com"
+  phone: ""
+  location: "City, Country"
+
+links:
+  resume: "files/resume.md"          # local path or https URL to PDF/MD
+  portfolio: "https://yoursite.dev"
+  github: "https://github.com/yourhandle"
+  linkedin: "https://linkedin.com/in/yourhandle"
+  x: "https://x.com/yourhandle"
+
+# Optional manual overrides (resume parser fills these if empty)
+highlights: []
+skills: []
+
+resume:
+  # Primary file for parsing (.md, .txt, .pdf)
+  path: "files/resume.md"
+  # Max bullets to pull from resume per job
+  max_bullets: 5
+
+draft:
+  # Set GEMINI_API_KEY in .env and use: raven draft --gemini
+  gemini:
+    enabled: false
+    model: "gemini-2.0-flash"
+  disclaimer: "Review and edit this draft yourself before sending or submitting."
+
+outreach:
+  greeting_generic: "Hey team"
+  subject: "Application: {{title}} at {{company}}"
+  body: |
+    {{greeting}},
+
+    {{#if company_hook}}{{company_hook}}
+
+    {{/if}}I'm writing about the {{title}} role at {{company}}{{#if location}} ({{location}}){{/if}}.
+
+    {{highlights}}
+
+    {{#if linksBlock}}
+    Links: {{linksBlock}}
+    {{/if}}
+
+    I'd welcome a chance to talk about the role. Listing: {{url}}
+
+    Best,
+    {{senderName}}
+    {{senderEmail}}
+  company_hook: ""
